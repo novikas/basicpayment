@@ -2,9 +2,9 @@ version: "3"
 services:
 
   api:
-    build: ./basic-payment-api
+    build: ./basicpayment-api
     env_file:
-      - ./basic-payment-api/.env
+      - ./basicpayment-api/.env
     
     environment:
       - DJANGO_DEBUG
@@ -13,7 +13,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ./basic-payment-api:/usr/src/basicpaymentapi
+      - ./basicpayment-api:/usr/src/basicpaymentapi
 
     ports:
       - "8000:8000"
@@ -24,7 +24,7 @@ services:
   db:
     image: postgres:9.6
     env_file:
-      - ./basic-payment-api/.env
+      - ./basicpayment-api/.env
     environment:
       - PGDATA=/var/lib/postgresql/data/pgdata
     
