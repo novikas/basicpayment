@@ -1,0 +1,6 @@
+[submodule "basicpayment-api"]
+	path = basicpayment-api
+	url = https://github.com/novikas/basicpayment-api.git
+[submodule "basicpayment-client"]
+	path = basicpayment-client
+	url = https://github.com/novikas/basicpayment-client.git
