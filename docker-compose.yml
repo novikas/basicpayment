@@ -1,0 +1,65 @@
+version: "3"
+services:
+
+  api:
+    build: ./basic-payment-api
+    env_file:
+      - ./basic-payment-api/.env_local
+    
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DJANGO_DEBUG
+      - DJANGO_SECRET_KEY
+      - DJANGO_SETTINGS_MODULE
+
+    depends_on:
+      - db
+    volumes:
+      - ./basic-payment-api:/usr/src/basicpaymentapi
+
+    ports:
+      - "8000:8000"
+
+    restart: always
+    command: bash start.sh
+
+  db:
+    image: postgres:9.6
+    env_file:
+      - ./basic-payment-api/.env_local
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    
+    volumes:
+      - pgstorage:/var/lib/postgresql/data/pgdata
+
+    restart: always
+  
+  frontend-build:
+    image: node:8
+    working_dir: /basicpayment
+
+    volumes:
+      - ./basicpayment-client:/basicpayment
+
+    command: yarn deploy
+
+    
+  nginx:
+    image: nginx
+    expose:
+      - "8080"
+    ports:
+      - 8080:8080
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./basicpayment-client/build:/public
+
+    restart: always
+
+    depends_on:
+      - api
+
+volumes:
+  pgstorage:
+    driver: local
